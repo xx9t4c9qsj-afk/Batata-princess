@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Special Surprise ❤️</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background-color: #fff5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: none;
+      position: relative;
+    }
+
+    .hidden { display: none; }
+
+    #noBtn {
+      position: absolute;
+      transition: left 0.25s ease, top 0.25s ease;
+    }
+
+    /* Floating Hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      animation: floatUp linear infinite;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      10% { opacity: 0.6; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hearts -->
+  <div id="hearts"></div>
+
+  <!-- PAGE 1 -->
+  <div id="page1"
+    class="relative text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md z-10">
+
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+      class="w-48 h-48 mx-auto mb-6" />
+
+    <h1 class="text-3xl font-bold text-pink-600 mb-8">
+      Batata 💖<br>Will you be my Valentine?
+    </h1>
+
+    <div class="relative flex justify-center gap-4 h-16" id="buttonArea">
+      <button id="yesBtn1"
+        aria-label="Yes, I will be your Valentine"
+        class="bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold py-3 px-8 rounded-full transition">
+        Yes
+      </button>
+
+      <button id="noBtn"
+        aria-label="No"
+        class="bg-red-500 text-white font-bold py-3 px-8 rounded-full">
+        No
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div id="page2"
+    class="hidden text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md z-10">
+
+    <img src="https://media.giphy.com/media/26BRv0SlYUR2zkWzC/giphy.gif"
+      class="w-48 h-48 mx-auto mb-4" />
+
+    <h1 class="text-3xl font-bold text-pink-600 mb-2">
+      I knew you'd say yes, Batata! ❤️
+    </h1>
+
+    <h2 class="text-xl text-gray-700 mb-4">
+      Surprise date starts in
+    </h2>
+
+    <div id="countdown"
+      class="text-6xl font-extrabold text-pink-500 mb-6">
+      5
+    </div>
+
+    <p class="text-gray-600">Get ready 😍</p>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div id="page3"
+    class="hidden text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md z-10">
+
+    <img src="https://media.giphy.com/media/l41lTfuxS8y2fA55m/giphy.gif"
+      class="w-48 h-48 mx-auto mb-6" />
+
+    <h1 class="text-4xl font-bold text-pink-600">
+      See you in 5 minutes, Batata 😍
+    </h1>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="popSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3"></audio>
+  <audio id="celebrateSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn1 = document.getElementById("yesBtn1");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+    const page3 = document.getElementById("page3");
+    const countdownEl = document.getElementById("countdown");
+    const popSound = document.getElementById("popSound");
+    const celebrateSound = document.getElementById("celebrateSound");
+    const heartsContainer = document.getElementById("hearts");
+    const buttonArea = document.getElementById("buttonArea");
+
+    // Initial position (prevents teleport jump)
+    noBtn.style.left = "60%";
+    noBtn.style.top = "0px";
+
+    function moveNoButton() {
+      const container = buttonArea.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+
+      const x = Math.random() * (container.width - btn.width);
+      const y = Math.random() * (container.height - btn.height);
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+
+      popSound.currentTime = 0;
+      popSound.play();
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+      navigator.vibrate?.(30);
+    });
+    noBtn.addEventListener("click", (e) => e.preventDefault());
+
+    yesBtn1.addEventListener("click", () => {
+      // iOS audio unlock
+      popSound.play().catch(()=>{});
+      celebrateSound.play().catch(()=>{});
+
+      page1.classList.add("hidden");
+      page2.classList.remove("hidden");
+      startCountdown();
+    });
+
+    function startCountdown() {
+      let time = 5;
+      countdownEl.textContent = time;
+
+      const timer = setInterval(() => {
+        time--;
+        countdownEl.textContent = time;
+
+        if (time <= 0) {
+          clearInterval(timer);
+          page2.classList.add("hidden");
+          page3.classList.remove("hidden");
+          celebrate();
+        }
+      }, 1000);
+    }
+
+    function celebrate() {
+      celebrateSound.play();
+      confetti({
+        particleCount: 180,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Floating hearts (performance safe)
+    function createHeart() {
+      if (heartsContainer.children.length > 30) return;
+
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = 16 + Math.random() * 24 + "px";
+      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    setInterval(createHeart, 500);
+  </script>
+
+</body>
+</html>
