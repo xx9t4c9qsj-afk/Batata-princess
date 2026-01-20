@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Batata ❤️</title>
 
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -18,123 +21,11 @@
       overflow: hidden;
     }
     .hidden { display: none; }
-    #noBtn { position: absolute; }
 
     .heart {
       position: absolute;
       bottom: -20px;
+      font-size: 20px;
       animation: floatUp linear infinite;
       opacity: 0.6;
-      pointer-events: none;
-    }
-
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 0; }
-      20% { opacity: 0.6; }
-      100% { transform: translateY(-110vh); opacity: 0; }
-    }
-  </style>
-</head>
-
-<body>
-
-<div id="hearts"></div>
-
-<!-- PAGE 1 -->
-<div id="page1" class="relative text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md">
-  <h1 class="text-3xl font-bold text-pink-600 mb-8">
-    Batata 💖<br>Will you be my Valentine?
-  </h1>
-
-  <div class="relative flex justify-center gap-4 h-16">
-    <button id="yesBtn"
-      class="bg-green-500 text-white font-bold py-3 px-8 rounded-full">
-      Yes
-    </button>
-
-    <button id="noBtn"
-      class="bg-red-500 text-white font-bold py-3 px-8 rounded-full">
-      No
-    </button>
-  </div>
-</div>
-
-<!-- PAGE 2 -->
-<div id="page2" class="hidden text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md">
-  <h1 class="text-3xl font-bold text-pink-600 mb-4">
-    I knew you'd say yes ❤️
-  </h1>
-
-  <p class="text-xl mb-4">Surprise starts in</p>
-  <div id="countdown" class="text-6xl font-bold text-pink-500">5</div>
-</div>
-
-<!-- PAGE 3 -->
-<div id="page3" class="hidden text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md">
-  <h1 class="text-4xl font-bold text-pink-600 mb-4">
-    ❤️ It’s a Date ❤️
-  </h1>
-
-  <p class="text-xl text-gray-700">
-    See you in 5 minutes, Batata 😘
-  </p>
-</div>
-
-<script>
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
-  const page1 = document.getElementById("page1");
-  const page2 = document.getElementById("page2");
-  const page3 = document.getElementById("page3");
-  const countdownEl = document.getElementById("countdown");
-  const hearts = document.getElementById("hearts");
-
-  function moveNo() {
-    noBtn.style.left = Math.random() * 200 + "px";
-    noBtn.style.top = Math.random() * 60 + "px";
-  }
-
-  noBtn.addEventListener("mouseenter", moveNo);
-  noBtn.addEventListener("touchstart", e => {
-    e.preventDefault();
-    moveNo();
-  });
-
-  yesBtn.addEventListener("click", () => {
-    page1.classList.add("hidden");
-    page2.classList.remove("hidden");
-    startCountdown();
-  });
-
-  function startCountdown() {
-    let t = 5;
-    countdownEl.textContent = t;
-    const timer = setInterval(() => {
-      t--;
-      countdownEl.textContent = t;
-      if (t === 0) {
-        clearInterval(timer);
-        page2.classList.add("hidden");
-        page3.classList.remove("hidden");
-        confetti();
-      }
-    }, 1000);
-  }
-
-  function createHeart() {
-    if (hearts.children.length > 25) return;
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "💖";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = "20px";
-    h.style.animationDuration = 5 + Math.random() * 5 + "s";
-    hearts.appendChild(h);
-    setTimeout(() => h.remove(), 10000);
-  }
-
-  setInterval(createHeart, 500);
-</script>
-
-</body>
-</html>
+     
