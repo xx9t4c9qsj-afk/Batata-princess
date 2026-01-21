@@ -1,3 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For My Maharani ❤️</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background-color: #fff5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .hidden { display: none; }
+
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp linear infinite;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 0; }
+      20% { opacity: 0.6; }
+      100% { transform: translateY(-110vh); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<audio id="loveMusic" loop>
+  <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-piano-loop-813.mp3" type="audio/mpeg">
+</audio>
+
+<div id="hearts"></div>
+
+<div id="page1" class="text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md border-2 border-pink-100">
+  <h1 id="question" class="text-3xl font-bold text-pink-600 mb-8">
+    👑 Arey Maharani aa gayi aap... <br><span class="text-2xl mt-2 block">Will you be my Valentine?</span>
+  </h1>
+
+  <div class="flex justify-center gap-4">
+    <button id="yesBtn"
+      class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-10 rounded-full transition-transform hover:scale-110">
+      Yes
+    </button>
+
+    <button id="noBtn"
+      class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-10 rounded-full">
+      No
+    </button>
+  </div>
+</div>
+
+<div id="page2" class="hidden text-center p-8 bg-white rounded-3xl shadow-xl w-[90vw] max-w-md border-2 border-pink-200">
+  <h1 class="text-4xl font-bold text-pink-600 mb-4">
+    ❤️ It’s a Date! ❤️
+  </h1>
+
+  <p class="text-xl text-gray-700 mb-3 italic">
+    "I was just waiting for my world to say Yes... and now it just did." ✨
+  </p>
+
+  <p class="text-lg text-pink-500 mb-4">
+    I promise to keep that beautiful smile on your face forever 💕
+  </p>
+
+  <p class="text-2xl font-bold text-pink-600 animate-bounce">
+    I love you, Batata! 😘
+  </p>
+</div>
+
 <script>
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
@@ -7,28 +91,30 @@
   const hearts = document.getElementById("hearts");
   const loveMusic = document.getElementById("loveMusic");
 
-  // Messages for "No" clicks: start with Maharani, end with Valentine
   const questions = [
-    "👑 Arey Maharani aa gayi aap 😌",
-    "Batata… are you seriously saying no? 😢",
-    "Wait! Don’t leave me hanging like this 😭",
-    "My heart just did a flip… please 🥺",
-    "Aww come on, it’s just a tiny YES 💕",
-    "You know saying no makes me sad… 😞",
-    "Pretty please with sugar on top? 🍬",
-    // Last message: the Valentine question
-    "Be my Valentine, Princess? 💖"
+    "Maharani ji, are you REALLY sure? 🥺",
+    "Don't do this to me pleaseeee 😢",
+    "My heart is shaking... 💔",
+    "Maan ja na kuttii 🥺",
+    "Bahot nakhre haii… haa toh bolna hi haii tujhe 😌",
+    "Last chance 😭 I’m begging now!",
+    "This is breaking me 🥹 please say yes"
   ];
 
   let noCount = 0;
+  let yesScale = 1;
 
   noBtn.addEventListener("click", () => {
     if (noCount < questions.length) {
       question.innerHTML = questions[noCount];
       noCount++;
+      
+      // Make the Yes button grow slightly each time she says No
+      yesScale += 0.15;
+      yesBtn.style.transform = `scale(${yesScale})`;
     } else {
       noBtn.classList.add("hidden");
-      question.innerHTML = "Only YES is allowed now, Princess 😘";
+      question.innerHTML = "Okay... only YES is allowed for the Queen! ❤️";
     }
   });
 
@@ -36,20 +122,22 @@
     page1.classList.add("hidden");
     page2.classList.remove("hidden");
 
-    loveMusic.play();
+    // Attempt to play music
+    loveMusic.play().catch(e => console.log("Audio requires user interaction first"));
 
     confetti({
       particleCount: 200,
       spread: 90,
-      origin: { y: 0.6 }
+      origin: { y: 0.6 },
+      colors: ['#ff0000', '#ff69b4', '#ffffff']
     });
   });
 
   function createHeart() {
-    if (hearts.children.length > 30) return;
+    if (hearts.children.length > 25) return;
     const heart = document.createElement("div");
     heart.className = "heart";
-    heart.textContent = "💖";
+    heart.textContent = Math.random() > 0.5 ? "💖" : "❤️";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.animationDuration = 5 + Math.random() * 5 + "s";
     heart.style.fontSize = 16 + Math.random() * 20 + "px";
@@ -59,3 +147,6 @@
 
   setInterval(createHeart, 600);
 </script>
+
+</body>
+</html>
